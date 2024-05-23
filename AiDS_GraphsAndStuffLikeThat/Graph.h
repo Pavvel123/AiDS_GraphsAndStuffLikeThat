@@ -6,15 +6,17 @@ private:
 	int* verticesDegrees;
 	bool* visited;
 	int* verticesColours;
-	int graphOrder;
+	long long graphOrder;
 
-	void Dfs(int v);
-	bool DfsCheck(int v, int colour);
+	void Dfs(long long v);
+	bool DfsCheck(long long v, long long colour);
+	static void Merge(int arr[], int left, int mid, int right);
+	void MergeSort(int arr[], int left, int right);
 
 public:
 	Graph();
 
-	int GetGraphOrder() const;
+	long long GetGraphOrder() const;
 
 	int* DegreeSequence();
 	int NumberOfComponents();
@@ -25,7 +27,7 @@ public:
 	int* VerticesColoursLF();
 	int* VerticesColoursSLF();
 	int DifferentC4SubgraphsNumber();
-	int GraphComplementsEdgesNumber();
+	long long GraphComplementsEdgesNumber() const;
 
 	~Graph();
 };

@@ -8,7 +8,7 @@ int main()
 	for (int w = 0; w < graphsNumber; w++)
 	{
 		Graph* g = new Graph();
-		int graphOrder = g->GetGraphOrder();
+		long long graphOrder = g->GetGraphOrder();
 
 		int* degreeSequence = g->DegreeSequence();
 		for (int i = 0; i < graphOrder; i++)

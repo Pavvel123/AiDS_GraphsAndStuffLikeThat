@@ -21,10 +21,12 @@ int main()
 
 		std::cout << (g->IsBipartite() ? 'T' : 'F') << '\n';
 
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			std::cout << "?\n";
 		}
+
+		std::cout << g->GraphComplementsEdgesNumber() << '\n';
 		delete g;
 	}
 }

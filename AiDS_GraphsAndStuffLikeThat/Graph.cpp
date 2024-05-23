@@ -142,7 +142,14 @@ int Graph::DifferentC4SubgraphsNumber()
 
 int Graph::GraphComplementsEdgesNumber()
 {
-	return 0;
+	int completeGraphEdgesNumber = graphOrder * (graphOrder - 1) / 2;
+	int thisGraphEdgesNumber = 0;
+	for (int i = 0; i < graphOrder; i++)
+	{
+		thisGraphEdgesNumber += verticesDegrees[i];
+	}
+	thisGraphEdgesNumber /= 2;
+	return completeGraphEdgesNumber - thisGraphEdgesNumber;
 }
 
 Graph::~Graph()

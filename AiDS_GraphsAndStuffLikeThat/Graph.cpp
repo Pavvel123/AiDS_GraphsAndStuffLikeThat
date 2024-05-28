@@ -32,7 +32,7 @@ bool Graph::DfsCheck(long long v, long long colour)
 	return true;
 }
 
-void Graph::Merge(int arr[], int left, int mid, int right)
+void Graph::Merge(int arr[], int left, int mid, int right, int arr2[])
 {
 	int n1 = mid - left + 1;
 	int n2 = right - mid;
@@ -40,15 +40,21 @@ void Graph::Merge(int arr[], int left, int mid, int right)
 	// Create temporary arrays
 	int* L = new int[n1];
 	int* R = new int[n2];
+	int* L2 = nullptr;
+	if (arr2 != nullptr) L2 = new int[n1];
+	int* R2 = nullptr;
+	if (arr2 != nullptr) R2 = new int[n2];
 
 	// Copy data to temporary arrays L[] and R[]
 	for (int i = 0; i < n1; i++) 
 	{
 		L[i] = arr[left + i];
+		if (arr2 != nullptr) L2[i] = arr2[left + i];
 	}
 	for (int j = 0; j < n2; j++)
 	{
 		R[j] = arr[mid + 1 + j];
+		if (arr2 != nullptr) R2[j] = arr2[mid + 1 + j];
 	}
 
 	// Merge the temporary arrays back into arr[left..right]
@@ -61,11 +67,13 @@ void Graph::Merge(int arr[], int left, int mid, int right)
 		if (L[i] >= R[j]) 
 		{
 			arr[k] = L[i];
+			if (arr2 != nullptr) arr2[k] = L2[i];
 			i++;
 		}
 		else 
 		{
 			arr[k] = R[j];
+			if (arr2 != nullptr) arr2[k] = R2[j];
 			j++;
 		}
 		k++;
@@ -75,6 +83,7 @@ void Graph::Merge(int arr[], int left, int mid, int right)
 	while (i < n1)
 	{
 		arr[k] = L[i];
+		if (arr2 != nullptr) arr2[k] = L2[i];
 		i++;
 		k++;
 	}
@@ -83,6 +92,7 @@ void Graph::Merge(int arr[], int left, int mid, int right)
 	while (j < n2)
 	{
 		arr[k] = R[j];
+		if (arr2 != nullptr) arr2[k] = R2[j];
 		j++;
 		k++;
 	}
@@ -90,20 +100,22 @@ void Graph::Merge(int arr[], int left, int mid, int right)
 	// Free the allocated memory
 	delete[] L;
 	delete[] R;
+	if (arr2 != nullptr) delete[] L2;
+	if (arr2 != nullptr) delete[] R2;
 }
 
-void Graph::MergeSort(int arr[], int left, int right)
+void Graph::MergeSort(int arr[], int left, int right, int arr2[])
 {
 	if (left < right)
 	{
 		int mid = left + (right - left) / 2;
 
 		// Sort first and second halves
-		MergeSort(arr, left, mid);
-		MergeSort(arr, mid + 1, right);
+		MergeSort(arr, left, mid, arr2);
+		MergeSort(arr, mid + 1, right, arr2);
 
 		// Merge the sorted halves
-		Merge(arr, left, mid, right);
+		Merge(arr, left, mid, right, arr2);
 	}
 }
 
@@ -196,6 +208,7 @@ int* Graph::VerticesColoursGreedy()
 		colours[i] = 0;
 		available[i] = true;
 	}
+	available[tempGraphOrder] = true;
 	colours[0] = 1; // Assign the first color to the first vertex
 
 	for (int u = 1; u < graphOrder; u++) 
@@ -236,7 +249,64 @@ int* Graph::VerticesColoursGreedy()
 
 int* Graph::VerticesColoursLF()
 {
-	return nullptr;
+	int tempGraphOrder = (int)graphOrder;
+	int* degrees = new int[tempGraphOrder];
+	int* indices = new int[tempGraphOrder];
+	for (int u = 0; u < graphOrder; u++) 
+	{
+		degrees[u] = verticesDegrees[u];
+		indices[u] = u;
+	}
+
+	MergeSort(degrees, 0, tempGraphOrder - 1, indices);
+	delete[] degrees;
+
+	int* colours = new int[tempGraphOrder];
+	bool* available = new bool[tempGraphOrder + 1];
+	for (int i = 0; i < graphOrder; i++)
+	{
+		colours[i] = 0;
+		available[i] = true;
+	}
+	available[tempGraphOrder] = true;
+
+	for (int i = 0; i < graphOrder; i++) 
+	{
+		int u = indices[i];
+
+		// Process all adjacent vertices and mark their colors as unavailable
+		for (int k = 0; k < verticesDegrees[u]; k++) 
+		{
+			if (colours[adjacencyList[u][k] - 1] != 0) 
+			{
+				available[colours[adjacencyList[u][k] - 1]] = false;
+			}
+		}
+
+		// Find the first available color starting from 1
+		int colour;
+		for (colour = 1; colour <= graphOrder; colour++) 
+		{
+			if (available[colour]) 
+			{
+				break;
+			}
+		}
+
+		colours[u] = colour; // Assign the found color
+
+		// Reset the values back to false for the next iteration
+		for (int k = 0; k < verticesDegrees[u]; k++) 
+		{
+			if (colours[adjacencyList[u][k] - 1] != 0) 
+			{
+				available[colours[adjacencyList[u][k] - 1]] = true;
+			}
+		}
+	}
+	delete[] indices;
+	delete[] available;
+	return colours;
 }
 
 int* Graph::VerticesColoursSLF()

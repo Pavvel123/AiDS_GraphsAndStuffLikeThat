@@ -34,7 +34,15 @@ int main()
 		delete[] verticesColoursGreedy;
 		std::cout << '\n';
 
-		for (int i = 0; i < 3; i++)
+		int* verticesColoursLF = g->VerticesColoursLF();
+		for (int i = 0; i < graphOrder; i++)
+		{
+			std::cout << verticesColoursLF[i] << ' ';
+		}
+		delete[] verticesColoursLF;
+		std::cout << '\n';
+
+		for (int i = 0; i < 2; i++)
 		{
 			std::cout << "?\n";
 		}

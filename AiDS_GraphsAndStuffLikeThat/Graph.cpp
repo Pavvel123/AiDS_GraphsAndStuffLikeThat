@@ -188,7 +188,50 @@ bool Graph::IsPlanar()
 
 int* Graph::VerticesColoursGreedy()
 {
-	return nullptr;
+	int tempGraphOrder = (int)graphOrder;
+	int* colours = new int[tempGraphOrder];
+	bool* available = new bool[tempGraphOrder + 1];
+	for (int i = 0; i < graphOrder; i++)
+	{
+		colours[i] = 0;
+		available[i] = true;
+	}
+	colours[0] = 1; // Assign the first color to the first vertex
+
+	for (int u = 1; u < graphOrder; u++) 
+	{
+		// Process all adjacent vertices and mark their colors as unavailable
+		for (int i = 0; i < verticesDegrees[u]; i++) 
+		{
+			if (colours[adjacencyList[u][i] - 1] != 0) 
+			{
+				available[colours[adjacencyList[u][i] - 1]] = false;
+			}
+		}
+
+		// Find the first available color
+		int colour;
+		for (colour = 1; colour <= graphOrder; colour++) 
+		{
+			if (available[colour]) 
+			{
+				break;
+			}
+		}
+
+		colours[u] = colour; // Assign the found color
+
+		// Reset the values back to false for the next iteration
+		for (int i = 0; i < verticesDegrees[u]; i++)
+		{
+			if (colours[adjacencyList[u][i] - 1] != 0)
+			{
+				available[colours[adjacencyList[u][i] - 1]] = true;
+			}
+		}
+	}
+	delete[] available;
+	return colours;
 }
 
 int* Graph::VerticesColoursLF()

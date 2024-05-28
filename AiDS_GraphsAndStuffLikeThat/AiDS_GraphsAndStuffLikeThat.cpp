@@ -21,7 +21,20 @@ int main()
 
 		std::cout << (g->IsBipartite() ? 'T' : 'F') << '\n';
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 2; i++)
+		{
+			std::cout << "?\n";
+		}
+
+		int* verticesColoursGreedy = g->VerticesColoursGreedy();
+		for (int i = 0; i < graphOrder; i++)
+		{
+			std::cout << verticesColoursGreedy[i] << ' ';
+		}
+		delete[] verticesColoursGreedy;
+		std::cout << '\n';
+
+		for (int i = 0; i < 3; i++)
 		{
 			std::cout << "?\n";
 		}

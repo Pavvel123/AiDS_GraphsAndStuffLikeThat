@@ -10,8 +10,8 @@ private:
 
 	void Dfs(long long v);
 	bool DfsCheck(long long v, long long colour);
-	static void Merge(int arr[], int left, int mid, int right, int arr2[] = nullptr);
-	void MergeSort(int arr[], int left, int right, int arr2[] = nullptr);
+	static void Merge(int* arr, int left, int mid, int right, int* arr2 = nullptr);
+	void MergeSort(int* arr, int left, int right, int* arr2 = nullptr);
 
 public:
 	Graph();
@@ -21,12 +21,12 @@ public:
 	int* DegreeSequence();
 	int NumberOfComponents();
 	bool IsBipartite();
-	int* EccentricityOfVertices();
-	bool IsPlanar();
+	//int* EccentricityOfVertices();
+	//bool IsPlanar();
 	int* VerticesColoursGreedy();
 	int* VerticesColoursLF();
-	int* VerticesColoursSLF();
-	int DifferentC4SubgraphsNumber();
+	//int* VerticesColoursSLF();
+	long long DifferentC4SubgraphsNumber() const;
 	long long GraphComplementsEdgesNumber() const;
 
 	~Graph();

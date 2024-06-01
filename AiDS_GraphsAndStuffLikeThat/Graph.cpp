@@ -4,10 +4,10 @@
 void Graph::Dfs(long long v)
 {
 	visited[v] = true;
-	for (long long i = 0; i < verticesDegrees[v]; i++) 
+	for (long long i = 0; i < verticesDegrees[v]; i++)
 	{
 		long long x = adjacencyList[v][i] - 1;
-		if (!visited[x]) 
+		if (!visited[x])
 		{
 			Dfs(x);
 		}
@@ -32,12 +32,11 @@ bool Graph::DfsCheck(long long v, long long colour)
 	return true;
 }
 
-void Graph::Merge(int arr[], int left, int mid, int right, int arr2[])
+void Graph::Merge(int* arr, int left, int mid, int right, int* arr2)
 {
 	int n1 = mid - left + 1;
 	int n2 = right - mid;
 
-	// Create temporary arrays
 	int* L = new int[n1];
 	int* R = new int[n2];
 	int* L2 = nullptr;
@@ -45,8 +44,7 @@ void Graph::Merge(int arr[], int left, int mid, int right, int arr2[])
 	int* R2 = nullptr;
 	if (arr2 != nullptr) R2 = new int[n2];
 
-	// Copy data to temporary arrays L[] and R[]
-	for (int i = 0; i < n1; i++) 
+	for (int i = 0; i < n1; i++)
 	{
 		L[i] = arr[left + i];
 		if (arr2 != nullptr) L2[i] = arr2[left + i];
@@ -57,20 +55,19 @@ void Graph::Merge(int arr[], int left, int mid, int right, int arr2[])
 		if (arr2 != nullptr) R2[j] = arr2[mid + 1 + j];
 	}
 
-	// Merge the temporary arrays back into arr[left..right]
-	int i = 0; // Initial index of first subarray
-	int j = 0; // Initial index of second subarray
-	int k = left; // Initial index of merged subarray
+	int i = 0;
+	int j = 0;
+	int k = left;
 
-	while (i < n1 && j < n2) 
+	while (i < n1 && j < n2)
 	{
-		if (L[i] >= R[j]) 
+		if (L[i] >= R[j])
 		{
 			arr[k] = L[i];
 			if (arr2 != nullptr) arr2[k] = L2[i];
 			i++;
 		}
-		else 
+		else
 		{
 			arr[k] = R[j];
 			if (arr2 != nullptr) arr2[k] = R2[j];
@@ -79,7 +76,6 @@ void Graph::Merge(int arr[], int left, int mid, int right, int arr2[])
 		k++;
 	}
 
-	// Copy the remaining elements of L[], if there are any
 	while (i < n1)
 	{
 		arr[k] = L[i];
@@ -88,7 +84,6 @@ void Graph::Merge(int arr[], int left, int mid, int right, int arr2[])
 		k++;
 	}
 
-	// Copy the remaining elements of R[], if there are any
 	while (j < n2)
 	{
 		arr[k] = R[j];
@@ -97,24 +92,19 @@ void Graph::Merge(int arr[], int left, int mid, int right, int arr2[])
 		k++;
 	}
 
-	// Free the allocated memory
 	delete[] L;
 	delete[] R;
 	if (arr2 != nullptr) delete[] L2;
 	if (arr2 != nullptr) delete[] R2;
 }
 
-void Graph::MergeSort(int arr[], int left, int right, int arr2[])
+void Graph::MergeSort(int* arr, int left, int right, int* arr2)
 {
 	if (left < right)
 	{
 		int mid = left + (right - left) / 2;
-
-		// Sort first and second halves
 		MergeSort(arr, left, mid, arr2);
 		MergeSort(arr, mid + 1, right, arr2);
-
-		// Merge the sorted halves
 		Merge(arr, left, mid, right, arr2);
 	}
 }
@@ -123,7 +113,7 @@ Graph::Graph()
 {
 	std::cin >> graphOrder;
 	int tempGraphOrder = (int)graphOrder;
-	adjacencyList = new int*[tempGraphOrder];
+	adjacencyList = new int* [tempGraphOrder];
 	verticesDegrees = new int[tempGraphOrder];
 	visited = new bool[tempGraphOrder];
 	verticesColours = new int[tempGraphOrder];
@@ -137,9 +127,7 @@ Graph::Graph()
 		verticesColours[i] = -1;
 		for (int k = 0; k < vertexDegree; k++)
 		{
-			int temp = 0;
-			std::cin >> temp;
-			adjacencyList[i][k] = temp;
+			std::cin >> adjacencyList[i][k];
 		}
 	}
 }
@@ -188,15 +176,15 @@ bool Graph::IsBipartite()
 	return true;
 }
 
-int* Graph::EccentricityOfVertices()
-{
-	return nullptr;
-}
+//int* Graph::EccentricityOfVertices()
+//{
+	//return nullptr;
+//}
 
-bool Graph::IsPlanar()
-{
-	return false;
-}
+//bool Graph::IsPlanar()
+//{
+	//return false;
+//}
 
 int* Graph::VerticesColoursGreedy()
 {
@@ -209,32 +197,29 @@ int* Graph::VerticesColoursGreedy()
 		available[i] = true;
 	}
 	available[tempGraphOrder] = true;
-	colours[0] = 1; // Assign the first color to the first vertex
+	colours[0] = 1;
 
-	for (int u = 1; u < graphOrder; u++) 
+	for (int u = 1; u < graphOrder; u++)
 	{
-		// Process all adjacent vertices and mark their colors as unavailable
-		for (int i = 0; i < verticesDegrees[u]; i++) 
+		for (int i = 0; i < verticesDegrees[u]; i++)
 		{
-			if (colours[adjacencyList[u][i] - 1] != 0) 
+			if (colours[adjacencyList[u][i] - 1] != 0)
 			{
 				available[colours[adjacencyList[u][i] - 1]] = false;
 			}
 		}
 
-		// Find the first available color
 		int colour;
-		for (colour = 1; colour <= graphOrder; colour++) 
+		for (colour = 1; colour <= graphOrder; colour++)
 		{
-			if (available[colour]) 
+			if (available[colour])
 			{
 				break;
 			}
 		}
 
-		colours[u] = colour; // Assign the found color
+		colours[u] = colour;
 
-		// Reset the values back to false for the next iteration
 		for (int i = 0; i < verticesDegrees[u]; i++)
 		{
 			if (colours[adjacencyList[u][i] - 1] != 0)
@@ -252,7 +237,7 @@ int* Graph::VerticesColoursLF()
 	int tempGraphOrder = (int)graphOrder;
 	int* degrees = new int[tempGraphOrder];
 	int* indices = new int[tempGraphOrder];
-	for (int u = 0; u < graphOrder; u++) 
+	for (int u = 0; u < graphOrder; u++)
 	{
 		degrees[u] = verticesDegrees[u];
 		indices[u] = u;
@@ -270,35 +255,32 @@ int* Graph::VerticesColoursLF()
 	}
 	available[tempGraphOrder] = true;
 
-	for (int i = 0; i < graphOrder; i++) 
+	for (int i = 0; i < graphOrder; i++)
 	{
 		int u = indices[i];
 
-		// Process all adjacent vertices and mark their colors as unavailable
-		for (int k = 0; k < verticesDegrees[u]; k++) 
+		for (int k = 0; k < verticesDegrees[u]; k++)
 		{
-			if (colours[adjacencyList[u][k] - 1] != 0) 
+			if (colours[adjacencyList[u][k] - 1] != 0)
 			{
 				available[colours[adjacencyList[u][k] - 1]] = false;
 			}
 		}
 
-		// Find the first available color starting from 1
 		int colour;
-		for (colour = 1; colour <= graphOrder; colour++) 
+		for (colour = 1; colour <= graphOrder; colour++)
 		{
-			if (available[colour]) 
+			if (available[colour])
 			{
 				break;
 			}
 		}
 
-		colours[u] = colour; // Assign the found color
+		colours[u] = colour;
 
-		// Reset the values back to false for the next iteration
-		for (int k = 0; k < verticesDegrees[u]; k++) 
+		for (int k = 0; k < verticesDegrees[u]; k++)
 		{
-			if (colours[adjacencyList[u][k] - 1] != 0) 
+			if (colours[adjacencyList[u][k] - 1] != 0)
 			{
 				available[colours[adjacencyList[u][k] - 1]] = true;
 			}
@@ -309,14 +291,44 @@ int* Graph::VerticesColoursLF()
 	return colours;
 }
 
-int* Graph::VerticesColoursSLF()
-{
-	return nullptr;
-}
+//int* Graph::VerticesColoursSLF()
+//{
+	//return nullptr;
+//}
 
-int Graph::DifferentC4SubgraphsNumber()
+long long Graph::DifferentC4SubgraphsNumber() const
 {
-	return 0;
+	long long count = 0;
+	for (long long u = 0; u < graphOrder; ++u) 
+	{
+		for (long long k = 0; k < verticesDegrees[u]; ++k) 
+		{
+			long long v = adjacencyList[u][k] - 1;
+			if (v <= u) continue;
+			
+			for (long long i = 0; i < verticesDegrees[u]; ++i) 
+			{
+				long long w = adjacencyList[u][i] - 1;
+				if (w == v) continue;
+
+				for (long long j = 0; j < verticesDegrees[v]; ++j) 
+				{
+					long long x = adjacencyList[v][j] - 1;
+					if (x == u || x == w) continue;
+
+					for (long long q = 0; q < verticesDegrees[w]; ++q) 
+					{
+						if (adjacencyList[w][q] - 1 == x) 
+						{
+							count++;
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	return count / 4;
 }
 
 long long Graph::GraphComplementsEdgesNumber() const
@@ -332,7 +344,7 @@ long long Graph::GraphComplementsEdgesNumber() const
 }
 
 Graph::~Graph()
-{	
+{
 	for (int i = 0; i < graphOrder; i++)
 	{
 		delete[] adjacencyList[i];

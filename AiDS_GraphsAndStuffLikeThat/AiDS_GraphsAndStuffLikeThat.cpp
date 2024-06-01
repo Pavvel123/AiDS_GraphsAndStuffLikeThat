@@ -3,30 +3,27 @@
 
 int main()
 {
-    int graphsNumber = 0;
-    std::cin >> graphsNumber;
+	int graphsNumber = 0;
+	std::cin >> graphsNumber;
 	for (int w = 0; w < graphsNumber; w++)
 	{
-		Graph* g = new Graph();
-		long long graphOrder = g->GetGraphOrder();
+		Graph g;
+		long long graphOrder = g.GetGraphOrder();
 
-		int* degreeSequence = g->DegreeSequence();
+		int* degreeSequence = g.DegreeSequence();
 		for (int i = 0; i < graphOrder; i++)
 		{
 			std::cout << degreeSequence[i] << ' ';
 		}
 		delete[] degreeSequence;
 
-		std::cout << '\n' << g->NumberOfComponents() << '\n';
+		std::cout << '\n' << g.NumberOfComponents() << '\n';
 
-		std::cout << (g->IsBipartite() ? 'T' : 'F') << '\n';
+		std::cout << (g.IsBipartite() ? 'T' : 'F') << '\n';
 
-		for (int i = 0; i < 2; i++)
-		{
-			std::cout << "?\n";
-		}
+		std::cout << "?\n?\n";
 
-		int* verticesColoursGreedy = g->VerticesColoursGreedy();
+		int* verticesColoursGreedy = g.VerticesColoursGreedy();
 		for (int i = 0; i < graphOrder; i++)
 		{
 			std::cout << verticesColoursGreedy[i] << ' ';
@@ -34,20 +31,19 @@ int main()
 		delete[] verticesColoursGreedy;
 		std::cout << '\n';
 
-		int* verticesColoursLF = g->VerticesColoursLF();
+		int* verticesColoursLF = g.VerticesColoursLF();
 		for (int i = 0; i < graphOrder; i++)
 		{
 			std::cout << verticesColoursLF[i] << ' ';
 		}
 		delete[] verticesColoursLF;
-		std::cout << '\n';
 
-		for (int i = 0; i < 2; i++)
-		{
-			std::cout << "?\n";
-		}
+		std::cout << "\n?";
 
-		std::cout << g->GraphComplementsEdgesNumber() << '\n';
-		delete g;
+		//std::cout << '\n' << g.DifferentC4SubgraphsNumber() << '\n';
+		std::cout << "\n?\n";
+
+		std::cout << g.GraphComplementsEdgesNumber() << '\n';
+		//delete g;
 	}
 }
